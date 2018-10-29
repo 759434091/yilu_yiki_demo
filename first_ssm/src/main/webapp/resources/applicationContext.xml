@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--使用了Mybatis内置连接池, 连接池有非常多选择比如阿里的Druid、出名的Hikari等...-->
+    <!--destroy-method 描写了销毁前要执行的方法，此处我填上了forceCloseAll方法-->
+    <bean id="dataSource" class="org.apache.ibatis.datasource.pooled.PooledDataSource" destroy-method="forceCloseAll">
+        <property name="driver" value="org.mariadb.jdbc.Driver"/>
+        <property name="url" value="jdbc:mariadb://118.126.111.189:3306/test_database"/>
+        <property name="username" value="mariadb"/>
+        <property name="password" value="13318318260"/>
+    </bean>
+
+    <!--整合Spring和Mybatis-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--mapper.xml的地址-->
+        <property name="mapperLocations" value="classpath:pers/a9043/first_ssm/mapper/*.xml"/>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--mapper接口所在的包-->
+        <property name="basePackage" value="pers.a9043.first_ssm.mapper"/>
+        <!--sql会话工厂-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+</beans>
