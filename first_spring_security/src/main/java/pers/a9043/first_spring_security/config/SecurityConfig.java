@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import javax.annotation.Resource;
-
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
@@ -22,16 +20,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtTokenUtils("a9043", "123");
     }
 
-    @Resource
-    private JwtConfigurer<HttpSecurity> jwtConfigurer;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .apply(jwtConfigurer)
+                .apply(new JwtConfigurer<>())
                 .and()
                 .exceptionHandling();
     }
